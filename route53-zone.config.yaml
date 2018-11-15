@@ -1,0 +1,30 @@
+route53_custom_resources:
+  custom_policies:
+    route53:
+      action:
+        - route53:*
+      resource: '*'
+    opsdns:
+      action: 
+        - sts:AssumeRole
+      resource:
+        - Fn::If: 
+            - RemoteNSRecords
+            - Ref: ParentIAMRole
+            - arn:aws:iam::123456789012:user/noaccess
+  roles:
+    Route53ZoneResource:
+      policies_inline:
+        - cloudwatch-logs
+        - route53
+        - opsdns
+  functions:
+    Route53ZoneCR:
+      code: route53_zone_cr.py
+      handler: route53_zone_cr.handler
+      runtime: python3.6
+      timeout: 600
+      role: Route53ZoneResource
+      environment:
+        ENVIRONMENT_NAME:
+          Ref: EnvironmentName
