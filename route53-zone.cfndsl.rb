@@ -50,10 +50,6 @@ CloudFormation do
     ResourceRecords FnGetAtt('HostedZone', 'NameServers')
   end
 
-  Output('DnsDomain') do
-    Value(dns_domain)
-  end
-
   Output('DnsDomainZoneId') do
     Condition 'CreateZone'
     Value(Ref('HostedZone'))
