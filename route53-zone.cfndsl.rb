@@ -13,7 +13,7 @@ CloudFormation do
 
   Condition('CreateZone', FnEquals(Ref('CreateZone'), 'true'))
 
-  dns_domain = FnSub('${EnvironmentName}.${RootDomainName}')
+  dns_domain = FnJoin('.',[Ref('EnvironmentName'),Ref('RootDomainName')])
   tags = []
   tags << { Key: 'Environment', Value: Ref(:EnvironmentName) }
   tags << { Key: 'EnvironmentType', Value: Ref(:EnvironmentType) }
