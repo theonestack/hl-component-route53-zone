@@ -43,7 +43,7 @@ CloudFormation do
   Route53_RecordSet('NSRecords') do
     Condition 'LocalNSRecords'
     HostedZoneName Ref('RootDomainName')
-    Comment FnSub('${EnvironmentName} - NS Records for ${EnvironmentName}.${RootDomainName}')
+    Comment FnJoin('',[FnSub('${EnvironmentName} - NS Records for ${EnvironmentName}.'), Ref('RootDomainName')])
     Name dns_domain
     Type 'NS'
     TTL 60
