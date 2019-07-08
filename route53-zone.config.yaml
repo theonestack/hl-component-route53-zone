@@ -1,3 +1,5 @@
+dns_domain: ${EnvironmentName}.${RootDomainName}
+
 route53_custom_resources:
   custom_policies:
     route53:
@@ -5,10 +7,10 @@ route53_custom_resources:
         - route53:*
       resource: '*'
     opsdns:
-      action: 
+      action:
         - sts:AssumeRole
       resource:
-        - Fn::If: 
+        - Fn::If:
             - RemoteNSRecords
             - Ref: ParentIAMRole
             - arn:aws:iam::123456789012:user/noaccess
