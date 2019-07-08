@@ -2,7 +2,7 @@ CloudFormation do
 
 
   Condition("LocalNSRecords", FnAnd([
-    FnEquals(Ref('AddNSRecords'), 'true'), 
+    FnEquals(Ref('AddNSRecords'), 'true'),
     FnEquals(Ref('ParentIAMRole'), '')
   ]))
 
@@ -13,7 +13,6 @@ CloudFormation do
 
   Condition('CreateZone', FnEquals(Ref('CreateZone'), 'true'))
 
-  dns_domain = FnJoin('.',[Ref('EnvironmentName'),Ref('RootDomainName')])
   tags = []
   tags << { Key: 'Environment', Value: Ref(:EnvironmentName) }
   tags << { Key: 'EnvironmentType', Value: Ref(:EnvironmentType) }
@@ -39,7 +38,7 @@ CloudFormation do
     Property 'NSRecords', FnGetAtt('HostedZone', 'NameServers')
     Property 'ParentIAMRole', Ref('ParentIAMRole')
   end
-  
+
   Route53_RecordSet('NSRecords') do
     Condition 'LocalNSRecords'
     HostedZoneName Ref('RootDomainName')
