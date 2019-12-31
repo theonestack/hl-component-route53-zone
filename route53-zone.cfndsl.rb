@@ -16,9 +16,10 @@ CloudFormation do
   tags = []
   tags << { Key: 'Environment', Value: Ref(:EnvironmentName) }
   tags << { Key: 'EnvironmentType', Value: Ref(:EnvironmentType) }
-  extra_tags.each { |key,value| tags << { Key: key, Value: value } } if defined? extra_tags
+  extra_tags = external_parameters.fetch(:extra_tags, {})
+  extra_tags.each { |key,value| tags << { Key: key, Value: value } }
 
-
+  dns_domain = external_parameters[:dns_domain]
   Route53_HostedZone('HostedZone') do
     Condition 'CreateZone'
     Name FnSub(dns_domain)
