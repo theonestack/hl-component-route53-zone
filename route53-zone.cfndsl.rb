@@ -18,11 +18,11 @@ CloudFormation do
   tags << { Key: 'EnvironmentType', Value: Ref(:EnvironmentType) }
   extra_tags = external_parameters.fetch(:extra_tags, {})
   extra_tags.each { |key,value| tags << { Key: key, Value: value } }
-
-  dns_domain = external_parameters[:dns_domain]
+  dns_domain_default = FnSub('${EnvironmentName}.${RootDomainName}')
+  dns_domain = external_parameters.fetch(:dns_domain, dns_domain_default)
   Route53_HostedZone('HostedZone') do
     Condition 'CreateZone'
-    Name FnSub(dns_domain)
+    Name dns_domain
     HostedZoneConfig ({
       Comment: FnSub("Hosted Zone for ${EnvironmentName}")
     })
@@ -35,7 +35,7 @@ CloudFormation do
     Property 'ServiceToken',FnGetAtt('Route53ZoneCR','Arn')
     Property 'AwsRegion', Ref('AWS::Region')
     Property 'RootDomainName', Ref('RootDomainName')
-    Property 'DomainName', FnSub(dns_domain)
+    Property 'DomainName', dns_domain
     Property 'NSRecords', FnGetAtt('HostedZone', 'NameServers')
     Property 'ParentIAMRole', Ref('ParentIAMRole')
   end
@@ -44,7 +44,7 @@ CloudFormation do
     Condition 'LocalNSRecords'
     HostedZoneName Ref('RootDomainName')
     Comment FnJoin('',[FnSub('${EnvironmentName} - NS Records for ${EnvironmentName}.'), Ref('RootDomainName')])
-    Name FnSub(dns_domain)
+    Name dns_domain
     Type 'NS'
     TTL 60
     ResourceRecords FnGetAtt('HostedZone', 'NameServers')

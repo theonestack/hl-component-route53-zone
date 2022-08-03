@@ -1,5 +1,3 @@
-dns_domain: ${EnvironmentName}.${RootDomainName}
-
 route53_custom_resources:
   custom_policies:
     route53:
