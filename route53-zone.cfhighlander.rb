@@ -9,6 +9,6 @@ CfhighlanderTemplate do
     ComponentParam 'ParentIAMRole', ''
   end
 
-  LambdaFunctions 'route53_custom_resources'
+  LambdaFunctions 'route53_custom_resources' unless disable_custom_resources
 
 end
