@@ -1,0 +1,7 @@
+test_metadata:
+  type: config
+  name: disable_custom_resource
+  description: set the description for your test
+
+disable_custom_resources: true
+

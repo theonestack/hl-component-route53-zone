@@ -1,3 +1,6 @@
+
+disable_custom_resources: false
+
 route53_custom_resources:
   custom_policies:
     route53:

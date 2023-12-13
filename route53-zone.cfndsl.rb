@@ -38,7 +38,7 @@ CloudFormation do
     Property 'DomainName', dns_domain
     Property 'NSRecords', FnGetAtt('HostedZone', 'NameServers')
     Property 'ParentIAMRole', Ref('ParentIAMRole')
-  end
+  end unless disable_custom_resources
 
   Route53_RecordSet('NSRecords') do
     Condition 'LocalNSRecords'
