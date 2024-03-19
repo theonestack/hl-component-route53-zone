@@ -53,6 +53,7 @@ CloudFormation do
   Output('DnsDomainZoneId') do
     Condition 'CreateZone'
     Value(Ref('HostedZone'))
+    Export FnSub("${EnvironmentName}-#{external_parameters[:component_name]}-dns-domain-zone-id")
   end
 
 end
